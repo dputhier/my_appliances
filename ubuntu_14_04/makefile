@@ -4,7 +4,7 @@ export LC_ALL=C # Avalaible for all recipe commands
 export LANG=C
 
 .PHONY: fix_local add_pub_key bashrc miscellaneous_tools \
-    R_installation R_lib_install python_install
+    R_installation R_lib_install python_install sickle
 
 ##########################
 # help
@@ -65,7 +65,7 @@ bashrc:
 ##########################
 
 miscellaneous_tools: 
-	apt-get install -y  emacs${EMACS_VER}-nox
+	apt-get install -y  emacs${EMACS_VER}-nox gdebi
 
 ##########################
 # Ubuntu repositories keys
@@ -115,9 +115,10 @@ R_lib_install:
 	pack <- pack.list[!(pack.list %in% installed.packages()[,'Package'])]; \
 	if(length(pack)) biocLite(pack)"
 
-Rstudio_install:
+Rstudio_install: miscellaneous_tools R_installation
+	@echo $$PATH
 	@wget https://download1.rstudio.org/rstudio-${RSTUDIO_VER}-amd64.deb
-	@yes | PATH=/sbin:$PATH  gdebi rstudio-${RSTUDIO_VER}-amd64.deb
+	@yes | PATH=/sbin:$$PATH  gdebi rstudio-${RSTUDIO_VER}-amd64.deb
 	@rm -f rstudio-${RSTUDIO_VER}-amd64.deb
 
 python_2and3_install:
@@ -131,39 +132,46 @@ python_2and3_install:
 
 sickle_install:
 	@git clone https://github.com/najoshi/sickle.git; \
-		cd sickle;\
-		make; \ 
-		mv sickle /usr/local/bin ;\
-		cd ..;\
-		rm -Rf sickle; \
+	cd sickle;\
+	make; \
+	echo "TOTO" ;\
+	mv sickle /usr/local/bin ;\
+	cd ..;\
+	rm -Rf sickle
 
 bowtie_install:
-	@wget http://downloads.sourceforge.net/project/bowtie-bio/bowtie/${BOWTIE1_VER}/bowtie-${BOWTIE1_VER}-linux-x86_64.zip
-	@unzip bowtie-${BOWTIE1_VER}-linux-x86_64.zip
-	@cd bowtie-${BOWTIE1_VER}
-	@mv bowtie* /usr/local/bin/
-	@cd ..: rm -Rf bowtie-${BOWTIE1_VER}
+	@wget http://downloads.sourceforge.net/project/bowtie-bio/bowtie/${BOWTIE1_VER}/bowtie-${BOWTIE1_VER}-linux-x86_64.zip;\
+	unzip bowtie-${BOWTIE1_VER}-linux-x86_64.zip;\
+	cd bowtie-${BOWTIE1_VER};\
+	mv bowtie* /usr/local/bin/;\
+	cd ..;\
+	rm -Rf bowtie-${BOWTIE1_VER}*
 
 bowtie2_install:
-	@wget http://downloads.sourceforge.net/project/bowtie-bio/bowtie2/2.2.5/bowtie2-${BOWTIE2_VER}-linux-x86_64.zip
-	@unzip bowtie2-${BOWTIE2_VER}-linux-x86_64.zip
-	@cd bowtie2-${BOWTIE2_VER}
-	@mv bowtie2* /usr/local/bin/
-	@cd ..: rm -Rf bowtie2-${BOWTIE2_VER}
+	@wget http://downloads.sourceforge.net/project/bowtie-bio/bowtie2/2.2.5/bowtie2-${BOWTIE2_VER}-linux-x86_64.zip;\
+	unzip bowtie2-${BOWTIE2_VER}-linux-x86_64.zip;\
+	cd bowtie2-${BOWTIE2_VER};\
+	mv bowtie2* /usr/local/bin/;\
+	cd ..;\
+	rm -Rf bowtie2-${BOWTIE2_VER}*
 
 tophat2_install:
-	@wget https://ccb.jhu.edu/software/tophat/downloads/tophat-${TOPHAT_VER}.Linux_x86_64.tar.gz
-	@tar xvfz tophat-${TOPHAT_VER}.Linux_x86_64.tar.gz
-	@rm -Rf AUTHORS LICENSE README intervaltree/ sortedcontainers/
-	@mv ./* /usr/local/bin
+	@wget https://ccb.jhu.edu/software/tophat/downloads/tophat-${TOPHAT_VER}.Linux_x86_64.tar.gz;\
+	tar xvfz tophat-${TOPHAT_VER}.Linux_x86_64.tar.gz;\
+	cd tophat-${TOPHAT_VER}.Linux_x86_64; \
+	rm -Rf AUTHORS LICENSE README intervaltree/ sortedcontainers/; \
+	mv ./* /usr/local/bin;\
+	cd ..; rm -Rf tophat-${TOPHAT_VER}.Linux_x86_64*
+
 
 subread_install:
-	@wget http://sourceforge.net/projects/subread/files/subread-${SUBREAD_VER}/subread-${SUBREAD_VER}-Linux-x86_64.tar.gz
-	@tar xvfz subread-${SUBREAD_VER}-Linux-x86_64.tar.gz
-	@cd subread-${SUBREAD_VER}-Linux-x86_64/bin/
-	@rm -Rf utilities/
-	@mv ./* /usr/local/bin
-	
+	@wget http://sourceforge.net/projects/subread/files/subread-${SUBREAD_VER}/subread-${SUBREAD_VER}-Linux-x86_64.tar.gz;\
+	tar xvfz subread-${SUBREAD_VER}-Linux-x86_64.tar.gz;\
+	cd subread-${SUBREAD_VER}-Linux-x86_64/bin/;\
+	rm -Rf utilities/;\
+	mv ./* /usr/local/bin;\
+	cd ../..; rm -Rf  subread-${SUBREAD_VER}-Linux-x86_64*
+
 fastqc_install:
 	@echo "todo"
 	
