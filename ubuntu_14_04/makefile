@@ -11,7 +11,7 @@ export LANG=C
 ##########################
 
 help:
-    @perl -ne 'if(/^(\w+):/){print "\t",$$1,"\n"}' $(MAKEFILE)
+	@perl -ne 'if(/^(\w+):/){print "\t",$$1,"\n"}' $(MAKEFILE)
 
 ##########################
 # Installation variables
