@@ -1,10 +1,15 @@
 MAKEFILE=makefile
 
-export LC_ALL=C # Avalaible for all recipe commands
+# The shell variables below will be available for 
+# recipe.
+export LC_ALL=C
 export LANG=C
 
-.PHONY: fix_local add_pub_key bashrc miscellaneous_tools \
-    R_installation R_lib_install python_install sickle
+.PHONY: help bashrc miscellaneous_tools add_pub_key \
+	add_repos desktop_and_x2go R_installation R_lib_install \
+	Rstudio_install python_2and3_install sickle_install \
+	bowtie_install bowtie2_install tophat2_install \
+	subread_install fastqc_install deep_tool_install get_all_version
 
 ##########################
 # help
@@ -42,20 +47,15 @@ BXPYTHON_VER="0.7.3"
 MATPLOTLIB_VER="1.4.3"
 PYSAM_VER="0.8.3"
 SCIPY_VER="0.16.0"
+SAMTOOLS_VER="1.2"
+BEDTOOLS_VER="2.24.0"
 
-##########################
-# fix invalid local
-##########################
-
-fix_local:
-	@echo "" >> /etc/environment
-	@echo 'LC_ALL=C' >>  /etc/environment
 
 ##########################
 # ~/.bashrc config
 ##########################
 
-bashrc: 
+bashrc:
 	@echo "" >> ~/.bashrc
 	@echo "export LC_ALL=C" >> ~/.bashrc
 	@echo "export LANG=C" >> ~/.bashrc
@@ -63,6 +63,14 @@ bashrc:
 	@echo 'export PATH=/sbin:$PATH' >> ~/.bashrc
 	@echo 'alias ls="ls --color"' >>  ~/.bashrc
 	@echo 'alias rm="rm -i"' >>  ~/.bashrc
+
+	@echo "" >> /etc/environment
+	@echo "export LC_ALL=C" >> /etc/environment
+	@echo "export LANG=C" >> /etc/environment
+	@echo 'export PS1="\[\033[01;31m\]\h\[\033[00m\]\[\033[01;32m\] \[\033[01;32m\]\u \[\033[00;33m\]\w\n\[\033[01;30m\e[0m\e[0;30m\]$$ "' >>  /etc/environment
+	@echo 'export PATH=/sbin:$PATH' >> /etc/environment
+	@echo 'alias ls="ls --color"' >>  /etc/environment
+	@echo 'alias rm="rm -i"' >>  /etc/environment
 
 ##########################
 # Miscellaneous tools
@@ -75,14 +83,14 @@ miscellaneous_tools:
 # Ubuntu repositories keys
 ##########################
 
-add_pub_key: 
+add_pub_key:
 	for i in '${PUB_KEY}'; do echo "PUB_KEY: $$i"; apt-key adv --recv-keys --keyserver keyserver.ubuntu.com $$i; done
 
 ##########################
 # Desktop installation
 ##########################
 
-add_repos:
+add_repos: 
 	@apt-get install --yes python-software-properties #installation de la commande "add-apt-repository"
 	@add-apt-repository ppa:x2go/stable --yes;
 	@apt-add-repository ppa:ubuntu-mate-dev/ppa --yes;
@@ -110,7 +118,7 @@ R_installation:
 	@echo "r <- getOption('repos'); r['CRAN'] <- 'http://cran.us.r-project.org'; options(repos = r);" >> ~/.Rprofile
 
 
-R_lib_install:
+R_lib_install: 
 	@Rscript -e "pack.list <- c(${CRAN_PACK_LIST}); \
 	pack <- pack.list[!(pack.list %in% installed.packages()[,'Package'])]; \
 	if(length(pack)) install.packages(pack); \
@@ -119,13 +127,13 @@ R_lib_install:
 	pack <- pack.list[!(pack.list %in% installed.packages()[,'Package'])]; \
 	if(length(pack)) biocLite(pack)"
 
-Rstudio_install: miscellaneous_tools R_installation
+Rstudio_install: 
 	@echo $$PATH
 	@wget https://download1.rstudio.org/rstudio-${RSTUDIO_VER}-amd64.deb
 	@yes | PATH=/sbin:$$PATH  gdebi rstudio-${RSTUDIO_VER}-amd64.deb
 	@rm -f rstudio-${RSTUDIO_VER}-amd64.deb
 
-python_2and3_install:
+python_2and3_install: 
 	@apt-get install ipython-notebook python-matplotlib python-pip
 	@apt-get install ipython3-notebook python3-matplotlib python3-pip
 	@pip3 install snakemake docutils
@@ -134,7 +142,7 @@ python_2and3_install:
 # NGS
 ###########
 
-sickle_install:
+sickle_install: 
 	@git clone https://github.com/najoshi/sickle.git; \
 	cd sickle;\
 	make; \
@@ -144,7 +152,7 @@ sickle_install:
 	rm -Rf sickle
 
 
-bowtie_install:
+bowtie_install: 
 	@wget http://downloads.sourceforge.net/project/bowtie-bio/bowtie/${BOWTIE1_VER}/bowtie-${BOWTIE1_VER}-linux-x86_64.zip;\
 	unzip bowtie-${BOWTIE1_VER}-linux-x86_64.zip;\
 	cd bowtie-${BOWTIE1_VER};\
@@ -195,14 +203,33 @@ deep_tool_install:
 
 
 
+samtools_install:
+	@wget http://sourceforge.net/projects/samtools/files/samtools/$(SAMTOOLS_VER)/samtools-$(SAMTOOLS_VER).tar.bz2
+	@bunzip2 samtools-$(SAMTOOLS_VER).tar.bz2
+	@tar xvf samtools-$(SAMTOOLS_VER).tar
+	@cd samtools-$(SAMTOOLS_VER); \
+		make ;\
+		make install
+	@rm -rf samtools*
 
-#https://github.com/arq5x/bedtools2/releases/download/v2.24.0/bedtools-2.24.0.tar.gz
+bedtools_install:
+	@wget https://github.com/arq5x/bedtools2/releases/download/v$(BEDTOOLS_VER)/bedtools-$(BEDTOOLS_VER).tar.gz
+	@tar xvfz bedtools-$(BEDTOOLS_VER).tar.gz
+	@cd bedtools2; \
+		make ;\
+		make install
+	@rm -rf bedtools*
+
+snakemake_install:
+	@pip3 install snakemake
+
 
 SICKLE_VER=$(shell sickle --version | grep "sickle version" | sed 's/sickle version //')
 PYTHON3_VER=$(shell python3 --version | sed 's/Python //')
 PYTHON_VER=$(shell python --version 2>&1 | sed 's/Python //')
 EMACS_VER=$(shell emacs --version| head -1 |sed 's/GNU Emacs //')
-
+MATE_DESKTOP=$(shell mate-session  --version| sed 's/mate-session //' )
+SNAKEMAKE_VER=$(shell snakemake --version)
 get_all_version:
 	@echo emacs $(EMACS_VER)
 	@echo tophat $(TOPHAT2_VER)
@@ -220,4 +247,11 @@ get_all_version:
 	@echo bx-python $(BXPYTHON_VER)
 	@echo matplotlib $(MATPLOTLIB_VER)
 	@echo pysam $(PYSAM_VER)
-	@echo scipy $(SCIPY_VER)
+	@echo scipy $(SCIPY_VER) 
+
+all: bashrc miscellaneous_tools add_pub_key add_repos \
+	desktop_and_x2go R_installation R_lib_install \
+	Rstudio_install python_2and3_install sickle_install \
+	bowtie_install bowtie2_install tophat2_install \
+	subread_install fastqc_install deep_tool_install \
+	samtools_install bedtools_install snakemake_install get_all_version
