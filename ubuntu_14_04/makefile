@@ -35,9 +35,13 @@ BOWTIE1_VER="1.1.2"
 BOWTIE2_VER="2.2.5"
 TOPHAT_VER="2.1.0"
 SUBREAD_VER="1.4.6-p4"
-PYTHON3="3.4.0"
-PYTHON="2.7.6"
-
+FASTQC_VER="v0.11.3"
+DEEPTOOLS_VER="1.5.11"
+NUMPY_VER="1.9.2"
+BXPYTHON_VER="0.7.3"
+MATPLOTLIB_VER="1.4.3"
+PYSAM_VER="0.8.3"
+SCIPY_VER="0.16.0"
 
 ##########################
 # fix invalid local
@@ -139,6 +143,7 @@ sickle_install:
 	cd ..;\
 	rm -Rf sickle
 
+
 bowtie_install:
 	@wget http://downloads.sourceforge.net/project/bowtie-bio/bowtie/${BOWTIE1_VER}/bowtie-${BOWTIE1_VER}-linux-x86_64.zip;\
 	unzip bowtie-${BOWTIE1_VER}-linux-x86_64.zip;\
@@ -173,5 +178,46 @@ subread_install:
 	cd ../..; rm -Rf  subread-${SUBREAD_VER}-Linux-x86_64*
 
 fastqc_install:
-	@echo "todo"
-	
+	@wget http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_${FASTQC_VER}.zip;\
+	unzip -o fastqc_${FASTQC_VER}.zip;\
+	rm -f fastqc_${FASTQC_VER}.zip;\
+	rm -rf /opt/FastQC; mv FastQC /opt;\
+	chmod 777 /opt/FastQC/fastqc;\
+	echo 'PATH=$$PATH:/opt/FastQC/' >> ~/.bashrc
+
+
+deep_tool_install: 
+	@sudo apt-get install -y python-dev python-pandas
+	@apt-get install -y libfreetype6-dev 
+	@pip install -I deeptools==${DEEPTOOLS_VER} \
+			numpy==${NUMPY_VER} bx-python==${BXPYTHON_VER} \
+			matplotlib==${MATPLOTLIB_VER}  pysam==${PYSAM_VER}  scipy==${SCIPY_VER}
+
+
+
+
+#https://github.com/arq5x/bedtools2/releases/download/v2.24.0/bedtools-2.24.0.tar.gz
+
+SICKLE_VER=$(shell sickle --version | grep "sickle version" | sed 's/sickle version //')
+PYTHON3_VER=$(shell python3 --version | sed 's/Python //')
+PYTHON_VER=$(shell python --version 2>&1 | sed 's/Python //')
+EMACS_VER=$(shell emacs --version| head -1 |sed 's/GNU Emacs //')
+
+get_all_version:
+	@echo emacs $(EMACS_VER)
+	@echo tophat $(TOPHAT2_VER)
+	@echo rstudio $(RSTUDIO_VER)
+	@echo sickle $(SICKLE_VER)
+	@echo bowtie1 $(BOWTIE1_VER)
+	@echo bowtie2 $(BOWTIE2_VER)
+	@echo tophat2 $(TOPHAT_VER)
+	@echo subread $(SUBREAD_VER)
+	@echo python3 $(PYTHON3_VER)
+	@echo python $(PYTHON_VER)
+	@echo fastqc $(FASTQC_VER)
+	@echo deeptools $(DEEPTOOLS_VER)
+	@echo numpy $(NUMPY_VER)
+	@echo bx-python $(BXPYTHON_VER)
+	@echo matplotlib $(MATPLOTLIB_VER)
+	@echo pysam $(PYSAM_VER)
+	@echo scipy $(SCIPY_VER)
