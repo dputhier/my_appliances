@@ -59,9 +59,11 @@ BEDTOOLS_VER=2.24.0
 bashrc:
 	@echo "" >> ~/.bashrc
 	@echo "export LC_ALL=C" >> ~/.bashrc
+	@echo "" >> ~/.bashrc
 	@echo "export LANG=C" >> ~/.bashrc
 	@echo 'export PS1="\[\033[01;31m\]\h\[\033[00m\]\[\033[01;32m\] \[\033[01;32m\]\u \[\033[00;33m\]\w\n\[\033[01;30m\e[0m\e[0;30m\]$$ "' >>  ~/.bashrc
-	@echo 'export PATH=/sbin:$PATH' >> ~/.bashrc
+	@echo "" >> ~/.bashrc
+	@echo 'export PATH=/sbin:$$PATH' >> ~/.bashrc
 	@echo 'alias ls="ls --color"' >>  ~/.bashrc
 	@echo 'alias rm="rm -i"' >>  ~/.bashrc
 
@@ -69,7 +71,8 @@ bashrc:
 	@echo "export LC_ALL=C" >> /etc/environment
 	@echo "export LANG=C" >> /etc/environment
 	@echo 'export PS1="\[\033[01;31m\]\h\[\033[00m\]\[\033[01;32m\] \[\033[01;32m\]\u \[\033[00;33m\]\w\n\[\033[01;30m\e[0m\e[0;30m\]$$ "' >>  /etc/environment
-	@echo 'export PATH=/sbin:$PATH' >> /etc/environment
+	@echo "" >> ~/.bashrc
+	@echo 'export PATH=/sbin:$$PATH' >> /etc/environment
 	@echo 'alias ls="ls --color"' >>  /etc/environment
 	@echo 'alias rm="rm -i"' >>  /etc/environment
 
