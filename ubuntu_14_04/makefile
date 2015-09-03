@@ -77,14 +77,14 @@ bashrc:
 ##########################
 
 miscellaneous_tools: 
-	apt-get install -y  emacs${EMACS_VER}-nox gdebi
+	apt-get install -y  emacs$(EMACS_VER)-nox gdebi
 
 ##########################
 # Ubuntu repositories keys
 ##########################
 
 add_pub_key:
-	for i in '${PUB_KEY}'; do echo "PUB_KEY: $$i"; apt-key adv --recv-keys --keyserver keyserver.ubuntu.com $$i; done
+	for i in '$(PUB_KEY)'; do echo "PUB_KEY: $$i"; apt-key adv --recv-keys --keyserver keyserver.ubuntu.com $$i; done
 
 ##########################
 # Desktop installation
@@ -112,26 +112,26 @@ desktop_and_x2go:
 
 R_installation:
 	@echo "" >> /etc/apt/sources.list
-	@echo "deb ${CRAN_MIRROR}/bin/linux/ubuntu ${UBUNTU_VER_NAME}/" >> /etc/apt/sources.list
+	@echo "deb $(CRAN_MIRROR)/bin/linux/ubuntu $(UBUNTU_VER_NAME)/" >> /etc/apt/sources.list
 	@apt-get update
 	@apt-get -y install r-base r-base-dev libcurl4-openssl-dev libxml2-dev
 	@echo "r <- getOption('repos'); r['CRAN'] <- 'http://cran.us.r-project.org'; options(repos = r);" >> ~/.Rprofile
 
 
 R_lib_install: 
-	@Rscript -e "pack.list <- c(${CRAN_PACK_LIST}); \
+	@Rscript -e "pack.list <- c($(CRAN_PACK_LIST)); \
 	pack <- pack.list[!(pack.list %in% installed.packages()[,'Package'])]; \
 	if(length(pack)) install.packages(pack); \
 	source('http://bioconductor.org/biocLite.R'); \
-	pack.list <- c(${BIOC_PACK_LIST}); \
+	pack.list <- c($(BIOC_PACK_LIST)); \
 	pack <- pack.list[!(pack.list %in% installed.packages()[,'Package'])]; \
 	if(length(pack)) biocLite(pack)"
 
 Rstudio_install: 
 	@echo $$PATH
-	@wget https://download1.rstudio.org/rstudio-${RSTUDIO_VER}-amd64.deb
-	@yes | PATH=/sbin:$$PATH  gdebi rstudio-${RSTUDIO_VER}-amd64.deb
-	@rm -f rstudio-${RSTUDIO_VER}-amd64.deb
+	@wget https://download1.rstudio.org/rstudio-$(RSTUDIO_VER)-amd64.deb
+	@yes | PATH=/sbin:$$PATH  gdebi rstudio-$(RSTUDIO_VER)-amd64.deb
+	@rm -f rstudio-$(RSTUDIO_VER)-amd64.deb
 
 python_2and3_install: 
 	@apt-get install ipython-notebook python-matplotlib python-pip
@@ -153,42 +153,42 @@ sickle_install:
 
 
 bowtie_install: 
-	@wget http://downloads.sourceforge.net/project/bowtie-bio/bowtie/${BOWTIE1_VER}/bowtie-${BOWTIE1_VER}-linux-x86_64.zip;\
-	unzip bowtie-${BOWTIE1_VER}-linux-x86_64.zip;\
-	cd bowtie-${BOWTIE1_VER};\
+	@wget http://downloads.sourceforge.net/project/bowtie-bio/bowtie/$(BOWTIE1_VER)/bowtie-$(BOWTIE1_VER)-linux-x86_64.zip;\
+	unzip bowtie-$(BOWTIE1_VER)-linux-x86_64.zip;\
+	cd bowtie-$(BOWTIE1_VER);\
 	mv bowtie* /usr/local/bin/;\
 	cd ..;\
-	rm -Rf bowtie-${BOWTIE1_VER}*
+	rm -Rf bowtie-$(BOWTIE1_VER)*
 
 bowtie2_install:
-	@wget http://downloads.sourceforge.net/project/bowtie-bio/bowtie2/2.2.5/bowtie2-${BOWTIE2_VER}-linux-x86_64.zip;\
-	unzip bowtie2-${BOWTIE2_VER}-linux-x86_64.zip;\
-	cd bowtie2-${BOWTIE2_VER};\
+	@wget http://downloads.sourceforge.net/project/bowtie-bio/bowtie2/2.2.5/bowtie2-$(BOWTIE2_VER)-linux-x86_64.zip;\
+	unzip bowtie2-$(BOWTIE2_VER)-linux-x86_64.zip;\
+	cd bowtie2-$(BOWTIE2_VER);\
 	mv bowtie2* /usr/local/bin/;\
 	cd ..;\
-	rm -Rf bowtie2-${BOWTIE2_VER}*
+	rm -Rf bowtie2-$(BOWTIE2_VER)*
 
 tophat2_install:
-	@wget https://ccb.jhu.edu/software/tophat/downloads/tophat-${TOPHAT_VER}.Linux_x86_64.tar.gz;\
-	tar xvfz tophat-${TOPHAT_VER}.Linux_x86_64.tar.gz;\
-	cd tophat-${TOPHAT_VER}.Linux_x86_64; \
+	@wget https://ccb.jhu.edu/software/tophat/downloads/tophat-$(TOPHAT_VER).Linux_x86_64.tar.gz;\
+	tar xvfz tophat-$(TOPHAT_VER).Linux_x86_64.tar.gz;\
+	cd tophat-$(TOPHAT_VER).Linux_x86_64; \
 	rm -Rf AUTHORS LICENSE README intervaltree/ sortedcontainers/; \
 	mv ./* /usr/local/bin;\
-	cd ..; rm -Rf tophat-${TOPHAT_VER}.Linux_x86_64*
+	cd ..; rm -Rf tophat-$(TOPHAT_VER).Linux_x86_64*
 
 
 subread_install:
-	@wget http://sourceforge.net/projects/subread/files/subread-${SUBREAD_VER}/subread-${SUBREAD_VER}-Linux-x86_64.tar.gz;\
-	tar xvfz subread-${SUBREAD_VER}-Linux-x86_64.tar.gz;\
-	cd subread-${SUBREAD_VER}-Linux-x86_64/bin/;\
+	@wget http://sourceforge.net/projects/subread/files/subread-$(SUBREAD_VER)/subread-$(SUBREAD_VER)-Linux-x86_64.tar.gz;\
+	tar xvfz subread-$(SUBREAD_VER)-Linux-x86_64.tar.gz;\
+	cd subread-$(SUBREAD_VER)-Linux-x86_64/bin/;\
 	rm -Rf utilities/;\
 	mv ./* /usr/local/bin;\
-	cd ../..; rm -Rf  subread-${SUBREAD_VER}-Linux-x86_64*
+	cd ../..; rm -Rf  subread-$(SUBREAD_VER)-Linux-x86_64*
 
 fastqc_install:
-	@wget http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_${FASTQC_VER}.zip;\
-	unzip -o fastqc_${FASTQC_VER}.zip;\
-	rm -f fastqc_${FASTQC_VER}.zip;\
+	@wget http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_$(FASTQC_VER).zip;\
+	unzip -o fastqc_$(FASTQC_VER).zip;\
+	rm -f fastqc_$(FASTQC_VER).zip;\
 	rm -rf /opt/FastQC; mv FastQC /opt;\
 	chmod 777 /opt/FastQC/fastqc;\
 	echo 'PATH=$$PATH:/opt/FastQC/' >> ~/.bashrc
@@ -197,9 +197,9 @@ fastqc_install:
 deep_tool_install: 
 	@sudo apt-get install -y python-dev python-pandas
 	@apt-get install -y libfreetype6-dev 
-	@pip install -I deeptools==${DEEPTOOLS_VER} \
-			numpy==${NUMPY_VER} bx-python==${BXPYTHON_VER} \
-			matplotlib==${MATPLOTLIB_VER}  pysam==${PYSAM_VER}  scipy==${SCIPY_VER}
+	@pip install -I deeptools==$(DEEPTOOLS_VER) \
+			numpy==$(NUMPY_VER) bx-python==$(BXPYTHON_VER) \
+			matplotlib==$(MATPLOTLIB_VER)  pysam==$(PYSAM_VER)  scipy==$(SCIPY_VER)
 
 
 
