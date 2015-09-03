@@ -63,7 +63,9 @@ bashrc:
 	@echo "" >> /etc/bash.bashrc
 	@echo "export LC_ALL=C" >> /etc/bash.bashrc
 	@echo "export LANG=C" >> /etc/bash.bashrc
-	@echo 'export force_color_prompt=yes "' >> /etc/bash.bashrc
+	@echo 'export force_color_prompt=yes' >> /etc/bash.bashrc
+	@echo "" >> /etc/profile
+	@echo 'source /etc/bash.bashrc' >> /etc/profile
 
 
 ##########################
