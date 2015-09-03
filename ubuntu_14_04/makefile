@@ -57,13 +57,13 @@ BEDTOOLS_VER=2.24.0
 ##########################
 
 bashrc:
-	@echo "" >> /etc/environment
-	@echo 'alias ls="ls --color"' >> /etc/environment
-	@echo 'alias rm="rm -i"' >>  /etc/environment
-	@echo "" >> /etc/environment
-	@echo "export LC_ALL=C" >> /etc/environment
-	@echo "export LANG=C" >> /etc/environment
-	@echo 'export force_color_prompt=yes "' >> /etc/environment
+	@echo "" >> /etc/bash.bashrc
+	@echo 'alias ls="ls --color"' >> /etc/bash.bashrc
+	@echo 'alias rm="rm -i"' >> /etc/bash.bashrc
+	@echo "" >> /etc/bash.bashrc
+	@echo "export LC_ALL=C" >> /etc/bash.bashrc
+	@echo "export LANG=C" >> /etc/bash.bashrc
+	@echo 'export force_color_prompt=yes "' >> /etc/bash.bashrc
 
 
 ##########################
