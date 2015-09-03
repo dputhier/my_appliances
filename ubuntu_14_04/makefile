@@ -225,13 +225,14 @@ snakemake_install:
 	@pip3 install snakemake
 
 
-SICKLE_VER=$(shell sickle --version | grep "sickle version" | sed 's/sickle version //')
-PYTHON3_VER=$(shell python3 --version | sed 's/Python //')
-PYTHON_VER=$(shell python --version 2>&1 | sed 's/Python //')
-EMACS_VER=$(shell emacs --version| head -1 |sed 's/GNU Emacs //')
-MATE_DESKTOP=$(shell mate-session  --version| sed 's/mate-session //' )
-SNAKEMAKE_VER=$(shell snakemake --version)
+
 get_all_version:
+	SICKLE_VER=$(shell sickle --version | grep "sickle version" | sed 's/sickle version //')
+	PYTHON3_VER=$(shell python3 --version | sed 's/Python //')
+	PYTHON_VER=$(shell python --version 2>&1 | sed 's/Python //')
+	EMACS_VER=$(shell emacs --version| head -1 |sed 's/GNU Emacs //')
+	MATE_DESKTOP=$(shell mate-session  --version| sed 's/mate-session //' )
+	SNAKEMAKE_VER=$(shell snakemake --version)
 	@echo emacs $(EMACS_VER)
 	@echo tophat $(TOPHAT2_VER)
 	@echo rstudio $(RSTUDIO_VER)
