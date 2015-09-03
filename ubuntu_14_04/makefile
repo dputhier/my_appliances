@@ -4,6 +4,7 @@ MAKEFILE=makefile
 # recipe.
 export LC_ALL=C
 export LANG=C
+export PATH=/ifb/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
 
 .PHONY: help bashrc miscellaneous_tools add_pub_key \
 	add_repos desktop_and_x2go R_installation R_lib_install \
