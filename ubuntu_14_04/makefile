@@ -124,7 +124,7 @@ R_lib_install:
 	if(length(pack)) biocLite(pack)"
 
 Rstudio_install: 
-	@echo $$PATH
+	@apt-get install -y libjpeg62
 	@wget https://download1.rstudio.org/rstudio-$(RSTUDIO_VER)-amd64.deb
 	@yes | PATH=/sbin:$$PATH  gdebi rstudio-$(RSTUDIO_VER)-amd64.deb
 	@rm -f rstudio-$(RSTUDIO_VER)-amd64.deb
