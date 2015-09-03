@@ -72,12 +72,6 @@ bashrc:
 	@echo 'alias ls="ls --color"' >>  /etc/environment
 	@echo 'alias rm="rm -i"' >>  /etc/environment
 
-##########################
-# Miscellaneous tools
-##########################
-
-miscellaneous_tools: 
-	apt-get install -y  emacs24-nox gdebi
 
 ##########################
 # Ubuntu repositories keys
@@ -104,6 +98,13 @@ desktop_and_x2go:
 	@apt-get install --yes --force-yes mate-desktop-environment-extra; 
 	@apt-get install --yes --force-yes mate-notification-daemon caja-gksu caja-open-terminal;
 	@sudo apt-get install --yes ambiance-colors radiance-colors;
+
+##########################
+# Miscellaneous tools
+##########################
+
+miscellaneous_tools: 
+	apt-get install -y  emacs24-nox gdebi
 
 
 ##########################
@@ -249,8 +250,8 @@ get_all_version:
 	@echo pysam $(PYSAM_VER)
 	@echo scipy $(SCIPY_VER) 
 
-all: bashrc miscellaneous_tools add_pub_key add_repos \
-	desktop_and_x2go R_installation R_lib_install \
+all: bashrc  add_pub_key add_repos \
+	desktop_and_x2go miscellaneous_tools R_installation R_lib_install \
 	Rstudio_install python_2and3_install sickle_install \
 	bowtie_install bowtie2_install tophat2_install \
 	subread_install fastqc_install deep_tool_install \
