@@ -77,7 +77,7 @@ bashrc:
 ##########################
 
 miscellaneous_tools: 
-	apt-get install -y  emacs$(EMACS_VER)-nox gdebi
+	apt-get install -y  emacs24-nox gdebi
 
 ##########################
 # Ubuntu repositories keys
