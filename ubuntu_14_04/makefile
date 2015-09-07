@@ -50,7 +50,7 @@ PYSAM_VER=0.8.3
 SCIPY_VER=0.16.0
 SAMTOOLS_VER=1.2
 BEDTOOLS_VER=2.24.0
-
+MACS_VER=1.4.2
 
 ##########################
 # ~/.bashrc config
@@ -219,8 +219,11 @@ bedtools_install:
 snakemake_install:
 	@pip3 install snakemake
 
-
-
+macs_install:
+	@wget https://github.com/downloads/taoliu/MACS/MACS-$(MACS_VER)-1.tar.gz
+	@tar xvfz MACS-$(MACS_VER)-1.tar.gz 
+	@cd MACS-$(MACS_VER); python setup.py install
+	@rm -Rf MACS-$(MACS_VER)*
 get_all_version:
 	SICKLE_VER=$(shell sickle --version | grep "sickle version" | sed 's/sickle version //')
 	PYTHON3_VER=$(shell python3 --version | sed 's/Python //')
@@ -251,4 +254,4 @@ all: bashrc  add_pub_key add_repos \
 	Rstudio_install python_2and3_install sickle_install \
 	bowtie_install bowtie2_install tophat2_install \
 	subread_install fastqc_install deep_tool_install \
-	samtools_install bedtools_install snakemake_install get_all_version
+	samtools_install bedtools_install snakemake_install macs_install get_all_version
