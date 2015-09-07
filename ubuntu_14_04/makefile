@@ -130,8 +130,8 @@ Rstudio_install:
 	@rm -f rstudio-$(RSTUDIO_VER)-amd64.deb
 
 python_2and3_install: 
-	@apt-get install ipython-notebook python-matplotlib python-pip
-	@apt-get install ipython3-notebook python3-matplotlib python3-pip
+	@apt-get -y  install ipython-notebook python-matplotlib python-pip
+	@apt-get -y install ipython3-notebook python3-matplotlib python3-pip
 	@pip3 install snakemake docutils
 
 ###########
