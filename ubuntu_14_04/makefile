@@ -54,6 +54,8 @@ MACS_VER=1.4.2
 JAVA_VER=oracle-java9
 IGV_VER=2.3.59
 IGVTOOLS_VER=2.3.57
+RSEQC_VER=2.6.2
+
 ##########################
 # ~/.bashrc config
 ##########################
@@ -243,13 +245,19 @@ igv_install:
 	echo "" >> /etc/bash.bashrc;\
 	echo "alias igv='cd /opt/IGV_$(IGV_VER); ./igv.sh'" >> /etc/bash.bashrc
 
-
 igv_tools_install:
 	@wget http://data.broadinstitute.org/igv/projects/downloads/igvtools_$(IGVTOOLS_VER).zip ;\
 	mv igvtools_$(IGVTOOLS_VER).zip /opt;\
 	cd /opt; unzip igvtools_$(IGVTOOLS_VER).zip;\
 	echo "" >> /etc/bash.bashrc;\
-	echo "alias igvtools='cd /opt/IGVTools; ./igvtools'" >> /etc/bash.bashrc
+	echo "alias igvtools='cd /opt/IGVTools; ./igvtools'" >> /etc/bash.bashr
+
+rseqc_install:
+	@wget http://sourceforge.net/projects/rseqc/files/RSeQC-$(RSEQC_VER).tar.gz;\
+	tar xvfz RSeQC-$(RSEQC_VER).tar.gz;
+	cd  RSeQC-$(RSEQC_VER); python setup.py install ; cd ..; rm -Rf RSeQC-$(RSEQC_VER)*
+
+
 get_all_version:
 	SICKLE_VER=$(shell sickle --version | grep "sickle version" | sed 's/sickle version //')
 	PYTHON3_VER=$(shell python3 --version | sed 's/Python //')
@@ -274,10 +282,14 @@ get_all_version:
 	@echo matplotlib $(MATPLOTLIB_VER)
 	@echo pysam $(PYSAM_VER)
 	@echo scipy $(SCIPY_VER) 
+	@echo RSeQC $(RSEQC_VER)
+	@echo igv $(IGV_VER)
+	@echo igv $(IGVTOOLS_VER)
 
 all: bashrc  add_pub_key add_repos \
 	desktop_and_x2go miscellaneous_tools R_installation R_lib_install \
 	Rstudio_install python_2and3_install sickle_install \
 	bowtie_install bowtie2_install tophat2_install \
 	subread_install fastqc_install deep_tool_install \
-	samtools_install bedtools_install snakemake_install macs_install get_all_version
+	samtools_install bedtools_install snakemake_install macs_install \
+	java9_install igv_install igv_tools_install rseqc_install  get_all_version 
