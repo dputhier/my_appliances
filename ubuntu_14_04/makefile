@@ -51,7 +51,9 @@ SCIPY_VER=0.16.0
 SAMTOOLS_VER=1.2
 BEDTOOLS_VER=2.24.0
 MACS_VER=1.4.2
-
+JAVA_VER=oracle-java9
+IGV_VER=2.3.59
+IGVTOOLS_VER=2.3.57
 ##########################
 # ~/.bashrc config
 ##########################
@@ -224,6 +226,30 @@ macs_install:
 	@tar xvfz MACS-$(MACS_VER)-1.tar.gz 
 	@cd MACS-$(MACS_VER); python setup.py install
 	@rm -Rf MACS-$(MACS_VER)*
+
+java9_install:
+	@echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections; \
+	echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections;\
+	add-apt-repository -y ppa:webupd8team/java; \
+	apt-get update ;\
+	apt-get -y install oracle-java9-installer ;\
+	apt-get install oracle-java9-set-default
+
+igv_install:
+	@wget http://data.broadinstitute.org/igv/projects/downloads/IGV_$(IGV_VER).zip; \
+	mv IGV_$(IGV_VER).zip /opt;\
+	cd /opt; unzip  IGV_$(IGV_VER).zip;\
+	cd IGV_$(IGV_VER);\
+	echo "" >> /etc/bash.bashrc;\
+	echo "alias igv='cd /opt/IGV_$(IGV_VER); ./igv.sh'" >> /etc/bash.bashrc
+
+
+igv_tools_install:
+	@wget http://data.broadinstitute.org/igv/projects/downloads/igvtools_$(IGVTOOLS_VER).zip ;\
+	mv igvtools_$(IGVTOOLS_VER).zip /opt;\
+	cd /opt; unzip igvtools_$(IGVTOOLS_VER).zip;\
+	echo "" >> /etc/bash.bashrc;\
+	echo "alias igvtools='cd /opt/IGVTools; ./igvtools'" >> /etc/bash.bashrc
 get_all_version:
 	SICKLE_VER=$(shell sickle --version | grep "sickle version" | sed 's/sickle version //')
 	PYTHON3_VER=$(shell python3 --version | sed 's/Python //')
