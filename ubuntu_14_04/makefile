@@ -205,7 +205,7 @@ deep_tool_install:
 
 samtools_install:
 	@wget --no-clobber http://sourceforge.net/projects/samtools/files/samtools/$(SAMTOOLS_VER)/samtools-$(SAMTOOLS_VER).tar.bz2
-	@bunzip2 samtools-$(SAMTOOLS_VER).tar.bz2
+	@bunzip2 -f samtools-$(SAMTOOLS_VER).tar.bz2
 	@tar xvf samtools-$(SAMTOOLS_VER).tar
 	@cd samtools-$(SAMTOOLS_VER); \
 		make ;\
