@@ -258,7 +258,7 @@ rseqc_install:
 	cd  RSeQC-$(RSEQC_VER); python setup.py install ; cd ..; rm -Rf RSeQC-$(RSEQC_VER)*
 
 deeptools_install:
-	@git clone git clone https://github.com/fidelram/deepTools ;\
+	@git clone https://github.com/fidelram/deepTools ;\
 	cd deepTools ;\
 	python setup.py install; cd ..; \
 	rm -Rf deeptools
