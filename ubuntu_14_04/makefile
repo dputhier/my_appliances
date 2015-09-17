@@ -257,6 +257,11 @@ rseqc_install:
 	tar xvfz RSeQC-$(RSEQC_VER).tar.gz;
 	cd  RSeQC-$(RSEQC_VER); python setup.py install ; cd ..; rm -Rf RSeQC-$(RSEQC_VER)*
 
+deeptools_install:
+	@git clone git clone https://github.com/fidelram/deepTools ;\
+	cd deepTools ;\
+	python setup.py install; cd ..; \
+	rm -Rf deeptools
 
 get_all_version:
 	SICKLE_VER=$(shell sickle --version | grep "sickle version" | sed 's/sickle version //')
