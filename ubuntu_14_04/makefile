@@ -129,7 +129,7 @@ R_lib_install:
 
 Rstudio_install: 
 	@apt-get install -y libjpeg62
-	@wget https://download1.rstudio.org/rstudio-$(RSTUDIO_VER)-amd64.deb
+	@wget --no-clobber https://download1.rstudio.org/rstudio-$(RSTUDIO_VER)-amd64.deb
 	@yes | PATH=/sbin:$$PATH  gdebi rstudio-$(RSTUDIO_VER)-amd64.deb
 	@rm -f rstudio-$(RSTUDIO_VER)-amd64.deb
 
@@ -153,7 +153,7 @@ sickle_install:
 
 
 bowtie_install: 
-	@wget http://downloads.sourceforge.net/project/bowtie-bio/bowtie/$(BOWTIE1_VER)/bowtie-$(BOWTIE1_VER)-linux-x86_64.zip;\
+	@wget --no-clobber http://downloads.sourceforge.net/project/bowtie-bio/bowtie/$(BOWTIE1_VER)/bowtie-$(BOWTIE1_VER)-linux-x86_64.zip;\
 	unzip bowtie-$(BOWTIE1_VER)-linux-x86_64.zip;\
 	cd bowtie-$(BOWTIE1_VER);\
 	mv bowtie* /usr/local/bin/;\
@@ -161,7 +161,7 @@ bowtie_install:
 	rm -Rf bowtie-$(BOWTIE1_VER)*
 
 bowtie2_install:
-	@wget http://downloads.sourceforge.net/project/bowtie-bio/bowtie2/2.2.5/bowtie2-$(BOWTIE2_VER)-linux-x86_64.zip;\
+	@wget --no-clobber http://downloads.sourceforge.net/project/bowtie-bio/bowtie2/2.2.5/bowtie2-$(BOWTIE2_VER)-linux-x86_64.zip;\
 	unzip bowtie2-$(BOWTIE2_VER)-linux-x86_64.zip;\
 	cd bowtie2-$(BOWTIE2_VER);\
 	mv bowtie2* /usr/local/bin/;\
@@ -169,7 +169,7 @@ bowtie2_install:
 	rm -Rf bowtie2-$(BOWTIE2_VER)*
 
 tophat2_install:
-	@wget https://ccb.jhu.edu/software/tophat/downloads/tophat-$(TOPHAT_VER).Linux_x86_64.tar.gz;\
+	@wget --no-clobber https://ccb.jhu.edu/software/tophat/downloads/tophat-$(TOPHAT_VER).Linux_x86_64.tar.gz;\
 	tar xvfz tophat-$(TOPHAT_VER).Linux_x86_64.tar.gz;\
 	cd tophat-$(TOPHAT_VER).Linux_x86_64; \
 	rm -Rf AUTHORS LICENSE README intervaltree/ sortedcontainers/; \
@@ -178,7 +178,7 @@ tophat2_install:
 
 
 subread_install:
-	@wget http://sourceforge.net/projects/subread/files/subread-$(SUBREAD_VER)/subread-$(SUBREAD_VER)-Linux-x86_64.tar.gz;\
+	@wget --no-clobber http://sourceforge.net/projects/subread/files/subread-$(SUBREAD_VER)/subread-$(SUBREAD_VER)-Linux-x86_64.tar.gz;\
 	tar xvfz subread-$(SUBREAD_VER)-Linux-x86_64.tar.gz;\
 	cd subread-$(SUBREAD_VER)-Linux-x86_64/bin/;\
 	rm -Rf utilities/;\
@@ -186,7 +186,7 @@ subread_install:
 	cd ../..; rm -Rf  subread-$(SUBREAD_VER)-Linux-x86_64*
 
 fastqc_install:
-	@wget http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_$(FASTQC_VER).zip;\
+	@wget --no-clobber http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_$(FASTQC_VER).zip;\
 	unzip -o fastqc_$(FASTQC_VER).zip;\
 	rm -f fastqc_$(FASTQC_VER).zip;\
 	rm -rf /opt/FastQC; mv FastQC /opt;\
@@ -204,7 +204,7 @@ deep_tool_install:
 
 
 samtools_install:
-	@wget http://sourceforge.net/projects/samtools/files/samtools/$(SAMTOOLS_VER)/samtools-$(SAMTOOLS_VER).tar.bz2
+	@wget --no-clobber http://sourceforge.net/projects/samtools/files/samtools/$(SAMTOOLS_VER)/samtools-$(SAMTOOLS_VER).tar.bz2
 	@bunzip2 samtools-$(SAMTOOLS_VER).tar.bz2
 	@tar xvf samtools-$(SAMTOOLS_VER).tar
 	@cd samtools-$(SAMTOOLS_VER); \
@@ -213,7 +213,7 @@ samtools_install:
 	@rm -rf samtools*
 
 bedtools_install:
-	@wget https://github.com/arq5x/bedtools2/releases/download/v$(BEDTOOLS_VER)/bedtools-$(BEDTOOLS_VER).tar.gz
+	@wget --no-clobber https://github.com/arq5x/bedtools2/releases/download/v$(BEDTOOLS_VER)/bedtools-$(BEDTOOLS_VER).tar.gz
 	@tar xvfz bedtools-$(BEDTOOLS_VER).tar.gz
 	@cd bedtools2; \
 		make ;\
@@ -224,7 +224,7 @@ snakemake_install:
 	@pip3 install snakemake
 
 macs_install:
-	@wget https://github.com/downloads/taoliu/MACS/MACS-$(MACS_VER)-1.tar.gz
+	@wget --no-clobber https://github.com/downloads/taoliu/MACS/MACS-$(MACS_VER)-1.tar.gz
 	@tar xvfz MACS-$(MACS_VER)-1.tar.gz 
 	@cd MACS-$(MACS_VER); python setup.py install
 	@rm -Rf MACS-$(MACS_VER)*
@@ -238,7 +238,7 @@ java9_install:
 	apt-get install oracle-java9-set-default
 
 igv_install:
-	@wget http://data.broadinstitute.org/igv/projects/downloads/IGV_$(IGV_VER).zip; \
+	@wget --no-clobber http://data.broadinstitute.org/igv/projects/downloads/IGV_$(IGV_VER).zip; \
 	mv IGV_$(IGV_VER).zip /opt;\
 	cd /opt; unzip  IGV_$(IGV_VER).zip;\
 	cd IGV_$(IGV_VER);\
@@ -246,14 +246,14 @@ igv_install:
 	echo "alias igv='cd /opt/IGV_$(IGV_VER); ./igv.sh'" >> /etc/bash.bashrc
 
 igv_tools_install:
-	@wget http://data.broadinstitute.org/igv/projects/downloads/igvtools_$(IGVTOOLS_VER).zip ;\
+	@wget --no-clobber http://data.broadinstitute.org/igv/projects/downloads/igvtools_$(IGVTOOLS_VER).zip ;\
 	mv igvtools_$(IGVTOOLS_VER).zip /opt;\
 	cd /opt; unzip igvtools_$(IGVTOOLS_VER).zip;\
 	echo "" >> /etc/bash.bashrc;\
 	echo "alias igvtools='cd /opt/IGVTools; ./igvtools'" >> /etc/bash.bashr
 
 rseqc_install:
-	@wget http://sourceforge.net/projects/rseqc/files/RSeQC-$(RSEQC_VER).tar.gz;\
+	@wget --no-clobber http://sourceforge.net/projects/rseqc/files/RSeQC-$(RSEQC_VER).tar.gz;\
 	tar xvfz RSeQC-$(RSEQC_VER).tar.gz;
 	cd  RSeQC-$(RSEQC_VER); python setup.py install ; cd ..; rm -Rf RSeQC-$(RSEQC_VER)*
 
