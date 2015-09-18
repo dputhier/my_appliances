@@ -19,6 +19,15 @@ export PATH=/ifb/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bi
 help:
 	@perl -ne 'if(/^(\w+):/){print "\t",$$1,"\n"}' $(MAKEFILE)
 
+
+##########################
+# Install genomes of interest
+##########################
+
+#SPECIES=hg38
+#SPECIES=hg19
+SPECIES=sacCer3
+
 ##########################
 # Installation variables
 ##########################
@@ -291,10 +300,91 @@ get_all_version:
 	@echo igv $(IGV_VER)
 	@echo igv $(IGVTOOLS_VER)
 
-all: bashrc  add_pub_key add_repos \
+
+################################################################
+## Intall genePredToGtf tool from Jim Kent
+################################################################
+
+install_genepred:
+	@echo "Installing genPredToGtf from the Jim Kent's legendary toolkit" ; \
+	wget --no-clobber http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/genePredToGtf; \
+	chmod 755 genePredToGtf ; \
+	mv -f genePredToGtf /usr/local/bin
+
+config_db_ucsc:
+	@echo "Generating config file for UCSC database queries" ; \
+	echo "db.host=genome-mysql.cse.ucsc.edu" > ~/.hg.conf ; \
+	echo "db.user=genomep" >> ~/.hg.conf ; \
+	echo "db.password=password" >> ~/.hg.conf ; \
+	chmod 600 ~/.hg.conf; \
+	echo "	~/.hg.conf"
+
+
+	
+all_install: bashrc  add_pub_key add_repos \
 	desktop_and_x2go miscellaneous_tools R_installation R_lib_install \
 	Rstudio_install python_2and3_install sickle_install \
 	bowtie_install bowtie2_install tophat2_install \
 	subread_install fastqc_install deep_tool_install \
 	samtools_install bedtools_install snakemake_install macs_install \
-	java9_install igv_install igv_tools_install rseqc_install  get_all_version 
+	java9_install igv_install igv_tools_install rseqc_install  get_all_version install_genepred \
+	config_db_ucsc	
+
+################################
+## Install one genome from UCSC
+################################
+
+GOLDEN_PATH_URL=http://hgdownload.cse.ucsc.edu/goldenPath
+UCSC_BASE_URL=$(GOLDEN_PATH_URL)/$(SPECIES)/bigZips/
+#UCSC_FASTA=$(UCSC_BASE_URL)/$(SPECIES).fa.gz
+FASTA_ARCHIVE=chromFa.tar.gz
+UCSC_FASTA=$(UCSC_BASE_URL)/$(FASTA_ARCHIVE)
+SPECIES_DIR=/root/mydisk/genomes/$(SPECIES)
+GENOME_SEQ=$(SPECIES)_genome
+GENOME_FASTA=$(GENOME_SEQ).fasta
+CHROM_INFO=chromInfo.txt
+CHROM_INFO_ARCHIVE=$(CHROM_INFO).gz
+BOF=http://hgdownload.soe.ucsc.edu/goldenPath
+CHROM_INFO_URL=$(GOLDEN_PATH_URL)/$(SPECIES)/database/$(CHROM_INFO)
+REFGENE=refGene.txt
+REFGENE_ARCHIVE=$(REFGENE).gz
+REFGENE_URL=http://hgdownload.soe.ucsc.edu/goldenPath/$(SPECIES)/database/$(REFGENE_ARCHIVE)
+GTF_FILE=$(SPECIES)_refGene.gtf
+
+one_species_from_ucsc:
+	@echo "Installing species from UCSC	$(SPECIES)"
+	@echo "	SPECIES_DIR	$(SPECIES_DIR)"
+	@mkdir -p $(SPECIES_DIR) ; \
+	cd $(SPECIES_DIR) ; \
+	echo "	Downloading genome sequence	$(UCSC_FASTA)" ; \
+	wget --no-clobber $(UCSC_FASTA) ; \
+	echo "	Uncompressing archive $(FASTA_ARCHIVE)" ; \
+	tar xvfz $(FASTA_ARCHIVE) &> tar_log.txt; \
+	cat *.fa > $(GENOME_FASTA); \
+	rm -f *.fa ; \
+	echo "Building index for bowtie2" ; \
+	bowtie2-build -f $(GENOME_FASTA) $(GENOME_SEQ) &> bowtie2_log.txt ; \
+	echo "Building index for bowtie" ; \
+	bowtie-build -f $(GENOME_FASTA) $(GENOME_SEQ) &> bowtie_log.txt ; \
+	echo "	SPECIES_DIR	$(SPECIES_DIR)"
+	echo "	Indexing fasta with samtools" ; \
+	samtools faidx $(GENOME_FASTA) ; \
+	echo "	FASTA index	$(SPECIES_DIR)/$(GENOME_FASTA).fai" ; \
+	echo "	Getting chromosome info	$(CHROM_INFO_URL)" ; \
+	wget --no-clobber $(CHROM_INFO_URL) ; \
+	gunzip -f $(CHROM_INFO_ARCHIVE) ; \
+	echo "	CHROM_INFO	$(SPECIES_DIR)/$(CHROM_INFO)" ; \
+	echo "	Downloding  GTF file" ; \
+	genePredToGtf  $(SPECIES) refGene $(GTF_FILE) ; \
+	echo "	 GTF_FILE	$(SPECIES_DIR)/$(GTF_FILE)" ; \
+	echo "	Downloading genome annotations	$(REFGENE_URL)" ; \
+	wget --no-clobber $(REFGENE_URL) ; \
+	echo "	Uncompressing archive $(REFGENE_ARCHIVE)" ; \
+	gunzip -f $(REFGENE_ARCHIVE) &> refgene_tar_log.txt; \
+	echo "	REFGENE	$(SPECIES_DIR)/$(REFGENE)" ; \
+	echo "JOB DONE" ; \
+	date
+
+it: 
+	@mkdir -p $(SPECIES_DIR) ; \
+	cd $(SPECIES_DIR) ; \
