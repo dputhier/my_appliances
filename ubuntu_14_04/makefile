@@ -203,11 +203,21 @@ fastqc_install:
 	chmod 777 /opt/FastQC/fastqc;\
 	echo 'PATH=$$PATH:/opt/FastQC/' >> ~/.bashrc
 
+kent_tools_install:
+	@mkdir -p kent; cd kent; \
+	wget ftp://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/bed* ; \
+	wget ftp://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/big* ; \
+	wget ftp://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/gff* ; \
+	wget ftp://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/gff* ; \
+	wget ftp://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/maf* ; \
+	wget ftp://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/wig* ; \
+	chmod 777 ./*
 
-kent_install:
-	@mkdir kent; cd kent; \
-	wget http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/*
-	
+#;\
+
+#mv ./ /usr/local/bin; \
+#cd ..; rm -Rf kent
+
 deep_tool_install: 
 	@sudo apt-get install -y python-dev python-pandas
 	@apt-get install -y libfreetype6-dev 
@@ -326,12 +336,12 @@ config_db_ucsc:
 	echo "	~/.hg.conf"
 
 
-	
+
 all_install: bashrc  add_pub_key add_repos \
 	desktop_and_x2go miscellaneous_tools R_installation R_lib_install \
 	Rstudio_install python_2and3_install sickle_install \
 	bowtie_install bowtie2_install tophat2_install \
-	subread_install fastqc_install deep_tool_install \
+	subread_install fastqc_install kent_tools_install deep_tool_install \
 	samtools_install bedtools_install snakemake_install macs_install \
 	java9_install igv_install igv_tools_install rseqc_install  get_all_version install_genepred \
 	config_db_ucsc	
