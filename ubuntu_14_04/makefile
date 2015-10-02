@@ -204,12 +204,17 @@ fastqc_install:
 	echo 'PATH=$$PATH:/opt/FastQC/' >> ~/.bashrc
 
 
+kent_install:
+	@mkdir kent; cd kent; \
+	wget http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/*
+	
 deep_tool_install: 
 	@sudo apt-get install -y python-dev python-pandas
 	@apt-get install -y libfreetype6-dev 
-	@pip install -I deeptools==$(DEEPTOOLS_VER) \
-			numpy==$(NUMPY_VER) bx-python==$(BXPYTHON_VER) \
+	@pip install -I numpy==$(NUMPY_VER) bx-python==$(BXPYTHON_VER) \
 			matplotlib==$(MATPLOTLIB_VER)  pysam==$(PYSAM_VER)  scipy==$(SCIPY_VER)
+	@git clone https://github.com/fidelram/deepTools.git; \
+	cd deepTools; python setup.py install
 
 
 
