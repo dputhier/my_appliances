@@ -211,12 +211,9 @@ kent_tools_install:
 	wget ftp://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/gff* ; \
 	wget ftp://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/maf* ; \
 	wget ftp://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/wig* ; \
-	chmod 777 ./*
-
-#;\
-
-#mv ./ /usr/local/bin; \
-#cd ..; rm -Rf kent
+	chmod 777 ./* ;\
+	mv ./ /usr/local/bin; \
+	cd ..; rm -Rf kent
 
 deep_tool_install: 
 	@sudo apt-get install -y python-dev python-pandas
