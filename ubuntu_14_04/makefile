@@ -87,7 +87,7 @@ bashrc:
 ##########################
 
 add_pub_key:
-	for i in '$(PUB_KEY)'; do echo "PUB_KEY: $$i"; apt-key adv --recv-keys --keyserver keyserver.ubuntu.com $$i; done
+	for i in '$(PUB_KEY)'; do sudo apt-key adv --keyserver  keyserver.ubuntu.com   --recv-keys $$i; done
 
 ##########################
 # Desktop installation
@@ -212,8 +212,8 @@ kent_tools_install:
 	wget ftp://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/maf* ; \
 	wget ftp://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/wig* ; \
 	chmod 777 ./* ;\
-	mv ./ /usr/local/bin; \
-	cd ..; rm -Rf kent
+	mv ./* /usr/local/bin; \
+	cd ..; 
 
 deep_tool_install: 
 	@sudo apt-get install -y python-dev python-pandas
